@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPA Lease Tracker – Uganda</title>
+<link href="https://fonts.googleapis.com/css2?family=Georgia&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+:root {
+  --ipa-green: #49ac57;
+  --dark-green: #155240;
+  --light-blue: #84d0d4;
+  --dark-blue: #2b4085;
+  --red-orange: #f26529;
+  --light-gray: #f1f2f2;
+  --dark-gray: #c9c9c8;
+  --charcoal: #414042;
+  --white: #ffffff;
+  --sidebar-w: 240px;
+  --header-h: 64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--light-gray);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit}
+input,select,textarea{font-family:inherit}
+
+/* ── Login ── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--dark-green) 0%,var(--dark-blue) 100%);padding:1rem}
+.login-card{background:var(--white);border-radius:16px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.35)}
+.login-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:2rem}
+.login-logo-badge{width:44px;height:44px;background:var(--ipa-green);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.1rem}
+.login-logo h2{font-size:1.15rem;color:var(--dark-green);font-weight:800;line-height:1.2}
+.login-logo span{font-size:.75rem;color:var(--dark-gray)}
+.login-title{font-family:'Georgia',serif;font-size:1.5rem;color:var(--dark-green);margin-bottom:.25rem}
+.login-sub{font-size:.85rem;color:var(--dark-gray);margin-bottom:1.75rem}
+.form-group{margin-bottom:1.1rem}
+.form-group label{display:block;font-size:.8rem;font-weight:700;color:var(--charcoal);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em}
+.form-control{width:100%;padding:.65rem .9rem;border:1.5px solid var(--dark-gray);border-radius:8px;font-size:.95rem;outline:none;transition:border-color .2s}
+.form-control:focus{border-color:var(--ipa-green)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.25rem;border:none;border-radius:8px;font-size:.9rem;font-weight:700;transition:all .18s}
+.btn-primary{background:var(--ipa-green);color:#fff}
+.btn-primary:hover{background:var(--dark-green)}
+.btn-secondary{background:var(--light-gray);color:var(--charcoal)}
+.btn-secondary:hover{background:var(--dark-gray)}
+.btn-danger{background:var(--red-orange);color:#fff}
+.btn-danger:hover{opacity:.88}
+.btn-outline{background:transparent;border:1.5px solid var(--ipa-green);color:var(--ipa-green)}
+.btn-outline:hover{background:var(--ipa-green);color:#fff}
+.btn-sm{padding:.4rem .8rem;font-size:.8rem}
+.btn-full{width:100%;justify-content:center}
+.demo-users{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--light-gray)}
+.demo-users p{font-size:.78rem;color:var(--dark-gray);margin-bottom:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.demo-btn{display:inline-block;margin:.2rem .2rem .2rem 0;padding:.3rem .65rem;background:var(--light-gray);border-radius:6px;font-size:.75rem;color:var(--dark-green);font-weight:700;cursor:pointer;border:none;transition:background .15s}
+.demo-btn:hover{background:var(--ipa-green);color:#fff}
+
+/* ── App Shell ── */
+#app{display:none;min-height:100vh}
+/* Header */
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--dark-green);display:flex;align-items:center;padding:0 1.25rem;z-index:100;gap:1rem}
+.header-logo{display:flex;align-items:center;gap:.6rem;color:#fff;font-weight:800;font-size:1rem;min-width:var(--sidebar-w);padding-right:1rem}
+.header-logo-badge{width:34px;height:34px;background:var(--ipa-green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;color:#fff}
+.header-greeting{flex:1;color:rgba(255,255,255,.85);font-size:.9rem}
+.header-greeting strong{color:#fff}
+.header-holiday{background:var(--ipa-green);color:#fff;padding:.25rem .8rem;border-radius:20px;font-size:.78rem;font-weight:700}
+.header-user{display:flex;align-items:center;gap:.6rem;color:#fff}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--ipa-green);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#fff}
+.header-role-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);padding:.2rem .6rem;border-radius:12px;font-size:.72rem;font-weight:700}
+.btn-logout{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);padding:.35rem .75rem;font-size:.8rem;border-radius:6px}
+.btn-logout:hover{background:rgba(255,255,255,.2)}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:1.5rem}
+
+/* Sidebar */
+.sidebar{position:fixed;top:var(--header-h);left:0;width:var(--sidebar-w);bottom:0;background:var(--white);border-right:1px solid var(--dark-gray);overflow-y:auto;z-index:90;transition:transform .25s}
+.nav-section{padding:.75rem 0 .25rem}
+.nav-label{padding:.35rem 1.25rem;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--dark-gray)}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.25rem;font-size:.875rem;font-weight:600;color:var(--charcoal);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{background:var(--light-gray);color:var(--dark-green)}
+.nav-item.active{background:#e8f5ea;color:var(--ipa-green);border-left-color:var(--ipa-green);font-weight:700}
+.nav-item .material-icons{font-size:1.1rem}
+
+/* Main */
+.main{margin-left:var(--sidebar-w);margin-top:var(--header-h);padding:1.75rem;min-height:calc(100vh - var(--header-h))}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:1.5rem}
+.page-header h1{font-family:'Georgia',serif;font-size:1.6rem;color:var(--dark-green)}
+.page-header p{font-size:.875rem;color:var(--dark-gray);margin-top:.25rem}
+
+/* Cards */
+.card{background:var(--white);border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.card-title{font-size:1rem;font-weight:700;color:var(--dark-green)}
+
+/* KPI Grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1rem;margin-bottom:1.5rem}
+.kpi-card{background:var(--white);border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:4px solid var(--ipa-green)}
+.kpi-card.blue{border-top-color:var(--dark-blue)}
+.kpi-card.orange{border-top-color:var(--red-orange)}
+.kpi-card.teal{border-top-color:var(--light-blue)}
+.kpi-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--dark-gray);margin-bottom:.4rem}
+.kpi-value{font-size:2rem;font-weight:800;color:var(--dark-green);line-height:1}
+.kpi-sub{font-size:.75rem;color:var(--dark-gray);margin-top:.35rem}
+.kpi-icon{float:right;color:var(--ipa-green);opacity:.2;font-size:2.5rem;margin-top:-2rem}
+
+/* Tables */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{padding:.65rem 1rem;background:var(--light-gray);text-align:left;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--dark-gray);white-space:nowrap}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--light-gray);color:var(--charcoal)}
+tr:hover td{background:#fafffe}
+.badge{display:inline-flex;align-items:center;padding:.2rem .65rem;border-radius:20px;font-size:.72rem;font-weight:700}
+.badge-green{background:#e8f5ea;color:var(--ipa-green)}
+.badge-blue{background:#e8edf8;color:var(--dark-blue)}
+.badge-orange{background:#fdeee6;color:var(--red-orange)}
+.badge-gray{background:var(--light-gray);color:var(--dark-gray)}
+.badge-teal{background:#e6f7f8;color:#1a8a8e}
+
+/* Forms */
+.form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:1rem}
+.form-row.full{grid-template-columns:1fr}
+.form-group-inline{display:flex;flex-direction:column;gap:.35rem}
+.form-group-inline label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--charcoal)}
+.form-control-sm{padding:.55rem .8rem;border:1.5px solid var(--dark-gray);border-radius:7px;font-size:.875rem;outline:none;width:100%;transition:border-color .2s}
+.form-control-sm:focus{border-color:var(--ipa-green)}
+
+/* Section Tabs */
+.tabs{display:flex;gap:.5rem;border-bottom:2px solid var(--light-gray);margin-bottom:1.5rem;overflow-x:auto}
+.tab{padding:.6rem 1.1rem;font-size:.85rem;font-weight:700;color:var(--dark-gray);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap}
+.tab.active{color:var(--ipa-green);border-bottom-color:var(--ipa-green)}
+
+/* Grid 2-col */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
+
+/* Chart */
+.bar-chart{display:flex;flex-direction:column;gap:.6rem;margin-top:.75rem}
+.bar-row{display:flex;align-items:center;gap:.75rem}
+.bar-label{font-size:.78rem;font-weight:600;width:130px;flex-shrink:0;text-align:right;color:var(--charcoal)}
+.bar-track{flex:1;height:22px;background:var(--light-gray);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--ipa-green);transition:width .6s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-size:.78rem;font-weight:700;width:40px;color:var(--dark-green)}
+
+/* Status dots */
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.4rem}
+.dot-green{background:var(--ipa-green)}
+.dot-orange{background:var(--red-orange)}
+.dot-blue{background:var(--dark-blue)}
+.dot-gray{background:var(--dark-gray)}
+
+/* Alert/Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--dark-green);color:#fff;padding:.85rem 1.25rem;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:.875rem;font-weight:600;z-index:999;display:none;max-width:340px}
+.toast.show{display:flex;align-items:center;gap:.6rem}
+.toast.error{background:var(--red-orange)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:14px;padding:1.75rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-title{font-family:'Georgia',serif;font-size:1.2rem;color:var(--dark-green)}
+.modal-close{background:none;border:none;font-size:1.4rem;color:var(--dark-gray);cursor:pointer;line-height:1}
+.modal-footer{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--light-gray)}
+
+/* Lease request lines */
+.lease-lines{margin-top:.75rem}
+.lease-line{background:var(--light-gray);border-radius:8px;padding:1rem;margin-bottom:.75rem;position:relative}
+.lease-line .remove-line{position:absolute;top:.6rem;right:.6rem;background:none;border:none;color:var(--red-orange);cursor:pointer}
+
+/* Responsive */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .header-logo{min-width:auto}
+}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+}
+
+/* Overlay when sidebar open on mobile */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:80}
+.sidebar-overlay.open{display:block}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--light-gray)}
+::-webkit-scrollbar-thumb{background:var(--dark-gray);border-radius:3px}
+
+/* Search & filter bar */
+.filter-bar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:1.25rem}
+.filter-bar input,.filter-bar select{padding:.5rem .85rem;border:1.5px solid var(--dark-gray);border-radius:7px;font-size:.85rem;outline:none;background:var(--white);transition:border-color .2s}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--ipa-green)}
+
+/* Section heading inside cards */
+.section-heading{font-size:.85rem;font-weight:800;color:var(--dark-green);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:2px solid var(--light-gray)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--dark-gray)}
+.empty-state .material-icons{font-size:3rem;opacity:.4;display:block;margin-bottom:.75rem}
+.empty-state p{font-size:.9rem}
+
+/* Print */
+@media print{.header,.sidebar,.filter-bar,.btn{display:none!important}.main{margin:0;padding:0}.card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-badge">IPA</div>
+      <div>
+        <h2>Innovations for Poverty Action</h2>
+        <span>Uganda Country Office</span>
+      </div>
+    </div>
+    <h1 class="login-title">Lease Tracker</h1>
+    <p class="login-sub">Sign in to manage device leases</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" class="form-control" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" class="form-control" placeholder="Enter password">
+    </div>
+    <div id="login-error" style="color:var(--red-orange);font-size:.82rem;margin-bottom:.75rem;display:none"></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">
+      <span class="material-icons" style="font-size:1rem">login</span> Sign In
+    </button>
+    <div class="demo-users">
+      <p>Demo Accounts</p>
+      <button class="demo-btn" onclick="quickLogin('admin','admin123')">Admin</button>
+      <button class="demo-btn" onclick="quickLogin('finance','fin123')">Finance</button>
+      <button class="demo-btn" onclick="quickLogin('pm1','pm123')">Proj Manager</button>
+      <button class="demo-btn" onclick="quickLogin('fm1','fm123')">Field Manager</button>
+      <button class="demo-btn" onclick="quickLogin('ra1','ra123')">Res. Associate</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- Header -->
+  <header class="header">
+    <button class="hamburger" onclick="toggleSidebar()"><span class="material-icons">menu</span></button>
+    <div class="header-logo">
+      <div class="header-logo-badge">IPA</div>
+      <span>Lease Tracker</span>
+    </div>
+    <div class="header-greeting" id="header-greeting"></div>
+    <span id="holiday-banner" class="header-holiday" style="display:none"></span>
+    <div class="header-user">
+      <div class="user-avatar" id="user-avatar"></div>
+      <div>
+        <div style="font-size:.82rem;font-weight:700;color:#fff" id="user-name-display"></div>
+        <span class="header-role-badge" id="user-role-badge"></span>
+      </div>
+      <button class="btn-logout btn" onclick="doLogout()"><span class="material-icons" style="font-size:.9rem">logout</span></button>
+    </div>
+  </header>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="material-icons">dashboard</span> Dashboard
+      </div>
+    </div>
+    <div class="nav-section" id="nav-inventory-section">
+      <div class="nav-label">Inventory</div>
+      <div class="nav-item" data-page="inventory" onclick="navigate('inventory')">
+        <span class="material-icons">devices</span> Assets
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Leases</div>
+      <div class="nav-item" data-page="new-lease" onclick="navigate('new-lease')">
+        <span class="material-icons">add_circle_outline</span> New Request
+      </div>
+      <div class="nav-item" data-page="active-leases" onclick="navigate('active-leases')">
+        <span class="material-icons">assignment</span> Active Leases
+      </div>
+      <div class="nav-item" data-page="lease-history" onclick="navigate('lease-history')">
+        <span class="material-icons">history</span> Lease History
+      </div>
+    </div>
+    <div class="nav-section" id="nav-admin-section">
+      <div class="nav-label">Admin</div>
+      <div class="nav-item" data-page="projects" onclick="navigate('projects')">
+        <span class="material-icons">folder</span> Projects
+      </div>
+      <div class="nav-item" data-page="users" onclick="navigate('users')">
+        <span class="material-icons">people</span> Users
+      </div>
+    </div>
+    <div class="nav-section" id="nav-reports-section">
+      <div class="nav-label">Reports</div>
+      <div class="nav-item" data-page="reports" onclick="navigate('reports')">
+        <span class="material-icons">bar_chart</span> Reports
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Reference</div>
+      <div class="nav-item" data-page="holidays" onclick="navigate('holidays')">
+        <span class="material-icons">event</span> Holiday Calendar
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>Real-time overview of device inventory and leases</p>
+      </div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Active Leases by Project</span>
+          </div>
+          <div id="bar-chart-area" class="bar-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Lease Activity</span>
+          </div>
+          <div id="recent-activity"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div id="page-inventory" class="page">
+      <div class="page-header">
+        <h1>Asset Inventory</h1>
+        <p>Manage PDA/tablet and laptop assets</p>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchInventoryTab('pda',this)">PDAs / Tablets</div>
+        <div class="tab" onclick="switchInventoryTab('laptop',this)">Laptops</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title" id="inv-tab-title">PDA / Tablet Assets</span>
+          <div style="display:flex;gap:.5rem" id="inv-admin-btns">
+            <button class="btn btn-outline btn-sm" onclick="openBulkUploadModal()">
+              <span class="material-icons" style="font-size:.9rem">upload</span> Bulk Upload
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="openAddAssetModal()">
+              <span class="material-icons" style="font-size:.9rem">add</span> Add Asset
+            </button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <input type="text" id="inv-search" placeholder="Search assets..." oninput="renderInventory()" style="min-width:180px">
+          <select id="inv-status-filter" onchange="renderInventory()">
+            <option value="">All Statuses</option>
+            <option>Available</option>
+            <option>Leased</option>
+            <option>Under Maintenance</option>
+            <option>Retired</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Asset ID</th><th>Serial No.</th><th>Model</th><th>Purchase Date</th>
+                <th>Cost (UGX)</th><th>Book Value (UGX)</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inv-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW LEASE -->
+    <div id="page-new-lease" class="page">
+      <div class="page-header">
+        <h1>New Lease Request</h1>
+        <p>Submit a device lease request for your project</p>
+      </div>
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="section-heading">Section 1: Request Information</div>
+        <div class="form-row">
+          <div class="form-group-inline">
+            <label>Request / Case Summary</label>
+            <input type="text" id="req-summary" class="form-control-sm" placeholder="Brief description">
+          </div>
+          <div class="form-group-inline">
+            <label>Requestor Name</label>
+            <input type="text" id="req-requestor" class="form-control-sm">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group-inline">
+            <label>Request Country</label>
+            <input type="text" id="req-country" class="form-control-sm" value="Uganda">
+          </div>
+          <div class="form-group-inline">
+            <label>Request Currency</label>
+            <input type="text" id="req-currency" class="form-control-sm" value="UGX">
+          </div>
+          <div class="form-group-inline">
+            <label>Budget Holder</label>
+            <select id="req-budget-holder" class="form-control-sm"></select>
+          </div>
+          <div class="form-group-inline">
+            <label>Date Requested</label>
+            <input type="date" id="req-date" class="form-control-sm">
+          </div>
+          <div class="form-group-inline">
+            <label>Date Required</label>
+            <input type="date" id="req-required-date" class="form-control-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="section-heading">Section 2: Inventory Request Details</div>
+        <div id="lease-lines-container" class="lease-lines"></div>
+        <button class="btn btn-outline btn-sm" onclick="addLeaseLine()">
+          <span class="material-icons" style="font-size:.9rem">add</span> Add Line
+        </button>
+        <div id="lease-total-row" style="margin-top:1rem;text-align:right;font-weight:700;color:var(--dark-green);font-size:1rem"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-heading">Section 3</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="saveDraft()">
+            <span class="material-icons" style="font-size:.9rem">save</span> Save and Continue Later
+          </button>
+          <button class="btn btn-primary" onclick="submitLeaseRequest()">
+            <span class="material-icons" style="font-size:.9rem">send</span> Submit Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE LEASES -->
+    <div id="page-active-leases" class="page">
+      <div class="page-header">
+        <h1>Active Leases</h1>
+        <p>Monitor all currently active and overdue leases</p>
+      </div>
+      <div class="card">
+        <div class="filter-bar">
+          <input type="text" id="al-search" placeholder="Search leases..." oninput="renderActiveLeases()" style="min-width:180px">
+          <select id="al-status-filter" onchange="renderActiveLeases()">
+            <option value="">All</option>
+            <option value="Active">Active</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Lease ID</th><th>Project</th><th>Device</th><th>Type</th>
+                <th>Start</th><th>End</th><th>Days</th><th>Amount (UGX)</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="al-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEASE HISTORY -->
+    <div id="page-lease-history" class="page">
+      <div class="page-header">
+        <h1>Lease History</h1>
+        <p>All completed and returned leases</p>
+      </div>
+      <div class="card">
+        <div class="filter-bar">
+          <input type="text" id="lh-search" placeholder="Search history..." oninput="renderLeaseHistory()" style="min-width:180px">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Lease ID</th><th>Project</th><th>Device</th><th>Type</th>
+                <th>Start</th><th>End</th><th>Days</th><th>Amount (UGX)</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="lh-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div id="page-projects" class="page">
+      <div class="page-header">
+        <h1>Projects</h1>
+        <p>Manage project records and cost centres</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Projects</span>
+          <button class="btn btn-primary btn-sm" id="add-project-btn" onclick="openAddProjectModal()">
+            <span class="material-icons" style="font-size:.9rem">add</span> Add Project
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Project Code</th><th>Project Name</th><th>Grant Code</th><th>Budget Holder</th>
+                <th>Project Manager</th><th>Active Leases</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="proj-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="page-users" class="page">
+      <div class="page-header">
+        <h1>User Management</h1>
+        <p>Manage system users and roles</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Users</span>
+          <button class="btn btn-primary btn-sm" onclick="openAddUserModal()">
+            <span class="material-icons" style="font-size:.9rem">person_add</span> Add User
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th><th>Full Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="page-reports" class="page">
+      <div class="page-header">
+        <h1>Reports</h1>
+        <p>Generate and export lease and billing reports</p>
+      </div>
+      <div class="grid-3" style="margin-bottom:1.5rem">
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('lease-summary')" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--ipa-green);font-size:2rem">summarize</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">Lease Summary</div><div style="font-size:.78rem;color:var(--dark-gray)">All lease records</div></div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('pda-utilization')" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--dark-blue);font-size:2rem">tablet_android</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">PDA Utilization</div><div style="font-size:.78rem;color:var(--dark-gray)">Usage by device</div></div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('laptop-utilization')" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--light-blue);font-size:2rem">laptop</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">Laptop Utilization</div><div style="font-size:.78rem;color:var(--dark-gray)">Usage by device</div></div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('project-billing')" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--red-orange);font-size:2rem">receipt_long</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">Project Billing</div><div style="font-size:.78rem;color:var(--dark-gray)">Charges by project</div></div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('monthly-revenue')" id="monthly-rev-card" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--ipa-green);font-size:2rem">attach_money</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">Monthly Revenue</div><div style="font-size:.78rem;color:var(--dark-gray)">Revenue by month</div></div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer;transition:box-shadow .2s" onclick="runReport('depreciation')" onmouseover="this.style.boxShadow='0 4px 16px rgba(73,172,87,.2)'" onmouseout="this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="material-icons" style="color:var(--charcoal);font-size:2rem">trending_down</span>
+            <div><div style="font-weight:700;color:var(--dark-green)">Depreciation Summary</div><div style="font-size:.78rem;color:var(--dark-gray)">Asset lifecycle</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="report-output-card" style="display:none">
+        <div class="card-header">
+          <span class="card-title" id="report-title">Report</span>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn-outline btn-sm" onclick="exportCSV()">
+              <span class="material-icons" style="font-size:.9rem">download</span> CSV
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">
+              <span class="material-icons" style="font-size:.9rem">print</span> Print
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap" id="report-table-area"></div>
+      </div>
+    </div>
+
+    <!-- HOLIDAYS -->
+    <div id="page-holidays" class="page">
+      <div class="page-header">
+        <h1>Uganda Holiday Calendar 2026</h1>
+        <p>Public holidays used for lease billing calculations</p>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Day</th><th>Holiday</th><th>Billing Impact</th></tr>
+            </thead>
+            <tbody id="holidays-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Modal</span>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA STORE ──────────────────────────────────────────────────
+const UGANDA_HOLIDAYS_2026 = [
+  {date:'2026-01-01',name:"New Year's Day"},
+  {date:'2026-01-26',name:"Liberation Day"},
+  {date:'2026-02-16',name:"Archbishop Janan Luwum Day"},
+  {date:'2026-02-18',name:"Ash Wednesday"},
+  {date:'2026-03-08',name:"International Women's Day"},
+  {date:'2026-03-20',name:"End of Ramadan (Eid al-Fitr)"},
+  {date:'2026-04-03',name:"Good Friday"},
+  {date:'2026-04-05',name:"Easter Sunday"},
+  {date:'2026-04-06',name:"Easter Monday"},
+  {date:'2026-05-01',name:"Labour Day"},
+  {date:'2026-05-27',name:"Feast of the Sacrifice (Eid al-Adha)"},
+  {date:'2026-06-03',name:"Martyr's Day"},
+  {date:'2026-06-09',name:"National Heroes Day"},
+  {date:'2026-10-09',name:"Independence Day"},
+  {date:'2026-12-25',name:"Christmas Day"},
+  {date:'2026-12-26',name:"Boxing Day"},
+];
+
+const HOLIDAY_GREETINGS = {
+  '2026-01-01': 'Happy New Year!',
+  '2026-10-09': 'Happy Independence Day, Uganda!',
+  '2026-05-01': 'Happy Labour Day!',
+  '2026-12-25': 'Happy Christmas!',
+  '2026-12-26': 'Happy Boxing Day!',
+};
+
+const HOLIDAY_SET = new Set(UGANDA_HOLIDAYS_2026.map(h=>h.date));
+
+const PDA_RATE = 5000;
+const LAPTOP_RATE = 20000;
+// Uganda depreciation: 33.33% reducing balance for electronic equipment
+const DEPR_RATE = 0.3333;
+
+// Default users
+let DB = {
+  users: [
+    {id:'u1',username:'admin',password:'admin123',name:'Admin User',email:'admin@poverty-action.org',role:'Administrator',active:true},
+    {id:'u2',username:'finance',password:'fin123',name:'Grace Nakato',email:'g.nakato@poverty-action.org',role:'Finance',active:true},
+    {id:'u3',username:'pm1',password:'pm123',name:'David Okello',email:'d.okello@poverty-action.org',role:'Project Manager',active:true},
+    {id:'u4',username:'fm1',password:'fm123',name:'Sarah Apio',email:'s.apio@poverty-action.org',role:'Field Manager',active:true},
+    {id:'u5',username:'ra1',password:'ra123',name:'James Mutebe',email:'j.mutebe@poverty-action.org',role:'Research Associate',active:true},
+  ],
+  projects: [
+    {id:'p1',code:'KCP-001',name:'Kilimo Credit Project',grant:'GR-2025-001',budgetHolder:'u2',pm:'u3',fm:'u4',financeContact:'u2'},
+    {id:'p2',code:'ESS-002',name:'Education Support Study',grant:'GR-2025-002',budgetHolder:'u2',pm:'u3',fm:'u4',financeContact:'u2'},
+    {id:'p3',code:'HEA-003',name:'Health Access Research',grant:'GR-2025-003',budgetHolder:'u2',pm:'u3',fm:'u4',financeContact:'u2'},
+  ],
+  assets: [
+    {id:'a1',assetId:'PDA-001',serial:'SN20240001',model:'Samsung Galaxy Tab A8',purchaseDate:'2024-01-15',cost:450000,type:'PDA',status:'Available'},
+    {id:'a2',assetId:'PDA-002',serial:'SN20240002',model:'Samsung Galaxy Tab A8',purchaseDate:'2024-01-15',cost:450000,type:'PDA',status:'Leased'},
+    {id:'a3',assetId:'PDA-003',serial:'SN20240003',model:'Lenovo Tab M10',purchaseDate:'2023-06-01',cost:380000,type:'PDA',status:'Available'},
+    {id:'a4',assetId:'PDA-004',serial:'SN20240004',model:'Lenovo Tab M10',purchaseDate:'2023-06-01',cost:380000,type:'PDA',status:'Under Maintenance'},
+    {id:'a5',assetId:'LPT-001',serial:'SN20240101',model:'Dell Latitude 3520',purchaseDate:'2024-02-10',cost:2800000,type:'Laptop',status:'Available'},
+    {id:'a6',assetId:'LPT-002',serial:'SN20240102',model:'Dell Latitude 3520',purchaseDate:'2024-02-10',cost:2800000,type:'Laptop',status:'Leased'},
+    {id:'a7',assetId:'LPT-003',serial:'SN20240103',model:'HP ProBook 450',purchaseDate:'2023-09-01',cost:2500000,type:'Laptop',status:'Available'},
+    {id:'a8',assetId:'LPT-004',serial:'SN20230001',model:'HP ProBook 450',purchaseDate:'2022-01-01',cost:2200000,type:'Laptop',status:'Retired'},
+  ],
+  leases: [
+    {id:'l1',leaseId:'LSE-0001',projectId:'p1',assetId:'a2',assetType:'PDA',startDate:'2026-05-05',endDate:'2026-06-15',days:null,amount:null,status:'Active',requestor:'u4',summary:'Field data collection – KCP Q2'},
+    {id:'l2',leaseId:'LSE-0002',projectId:'p2',assetId:'a6',assetType:'Laptop',startDate:'2026-05-10',endDate:'2026-05-25',days:null,amount:null,status:'Returned',requestor:'u3',summary:'Endline survey – ESS'},
+    {id:'l3',leaseId:'LSE-0003',projectId:'p3',assetId:'a3',assetType:'PDA',startDate:'2026-04-01',endDate:'2026-05-30',days:null,amount:null,status:'Returned',requestor:'u5',summary:'Baseline enumeration – HEA'},
+    {id:'l4',leaseId:'LSE-0004',projectId:'p1',assetId:'a5',assetType:'Laptop',startDate:'2026-05-20',endDate:'2026-06-01',days:null,amount:null,status:'Overdue',requestor:'u3',summary:'Data analysis – KCP'},
+  ],
+  nextLeaseNum: 5,
+  nextAssetNums: {PDA: 5, Laptop: 5},
+};
+
+// Calculate days and amounts for all leases
+DB.leases.forEach(l => {
+  l.days = countChargeDays(l.startDate, l.endDate);
+  l.amount = l.days * (l.assetType === 'PDA' ? PDA_RATE : LAPTOP_RATE);
+});
+
+// ── SESSION ─────────────────────────────────────────────────────
+let currentUser = null;
+let currentInventoryTab = 'pda';
+let currentReportType = null;
+
+// ── LOGIN ────────────────────────────────────────────────────────
+function quickLogin(u, p) {
+  document.getElementById('login-user').value = u;
+  document.getElementById('login-pass').value = p;
+  doLogin();
+}
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  const user = DB.users.find(x => x.username === u && x.password === p && x.active);
+  if (!user) {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-error').textContent = 'Invalid username or password.';
+    return;
+  }
+  currentUser = user;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+}
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+function initApp() {
+  setupHeader();
+  setupNav();
+  navigate('dashboard');
+}
+
+function setupHeader() {
+  const now = new Date();
+  const h = now.getHours();
+  const greeting = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+  document.getElementById('header-greeting').innerHTML = `${greeting}, <strong>${currentUser.name.split(' ')[0]}</strong>`;
+  document.getElementById('user-name-display').textContent = currentUser.name;
+  document.getElementById('user-role-badge').textContent = currentUser.role;
+  document.getElementById('user-avatar').textContent = currentUser.name.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+
+  // Holiday banner
+  const today = now.toISOString().slice(0,10);
+  const hg = HOLIDAY_GREETINGS[today];
+  const hb = document.getElementById('holiday-banner');
+  if (hg) { hb.textContent = hg; hb.style.display = 'inline-block'; }
+
+  // Set default date on lease form
+  document.getElementById('req-date').value = today;
+  document.getElementById('req-requestor').value = currentUser.name;
+}
+
+function setupNav() {
+  const role = currentUser.role;
+  const canAdmin = role === 'Administrator';
+  const canInventory = role === 'Administrator';
+  const canReports = ['Administrator','Finance','Project Manager'].includes(role);
+
+  document.getElementById('nav-inventory-section').style.display = canInventory ? 'block' : 'none';
+  document.getElementById('nav-admin-section').style.display = canAdmin ? 'block' : 'none';
+  document.getElementById('nav-reports-section').style.display = canReports ? 'block' : 'none';
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-'+page);
+  if(pg) pg.classList.add('active');
+  const ni = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if(ni) ni.classList.add('active');
+
+  // Render page
+  if(page==='dashboard') renderDashboard();
+  if(page==='inventory') renderInventory();
+  if(page==='active-leases') renderActiveLeases();
+  if(page==='lease-history') renderLeaseHistory();
+  if(page==='new-lease') setupLeaseForm();
+  if(page==='projects') renderProjects();
+  if(page==='users') renderUsers();
+  if(page==='holidays') renderHolidays();
+
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+// ── BILLING CALCULATION ───────────────────────────────────────────
+function countChargeDays(startStr, endStr) {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  let count = 0;
+  const d = new Date(start);
+  while(d <= end) {
+    const dow = d.getDay();
+    const ds = d.toISOString().slice(0,10);
+    if(dow !== 0 && dow !== 6 && !HOLIDAY_SET.has(ds)) count++;
+    d.setDate(d.getDate()+1);
+  }
+  return count;
+}
+
+// ── DEPRECIATION ──────────────────────────────────────────────────
+function calcBookValue(cost, purchaseDate) {
+  const years = (new Date() - new Date(purchaseDate)) / (365.25 * 24 * 3600 * 1000);
+  let val = cost;
+  for(let y = 0; y < Math.floor(years); y++) val *= (1 - DEPR_RATE);
+  return Math.max(0, Math.round(val));
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────
+function renderDashboard() {
+  const role = currentUser.role;
+  const canRevenue = ['Administrator','Finance','Project Manager'].includes(role);
+
+  const total = DB.assets.length;
+  const available = DB.assets.filter(a=>a.status==='Available').length;
+  const activeLeases = DB.leases.filter(l=>l.status==='Active').length;
+  const overdueLeases = DB.leases.filter(l=>l.status==='Overdue').length;
+  const fullyDepr = DB.assets.filter(a=>calcBookValue(a.cost,a.purchaseDate)===0).length;
+
+  const monthlyRev = DB.leases
+    .filter(l=>['Active','Overdue'].includes(l.status))
+    .reduce((s,l)=>s+l.amount,0);
+
+  let kpis = [
+    {label:'Total Devices', value:total, icon:'devices', cls:''},
+    {label:'Available Devices', value:available, icon:'check_circle', cls:'teal'},
+    {label:'Active Leases', value:activeLeases, icon:'assignment', cls:'blue'},
+    {label:'Overdue Leases', value:overdueLeases, icon:'warning', cls:'orange'},
+    {label:'Fully Depreciated', value:fullyDepr, icon:'trending_down', cls:''},
+  ];
+  if(canRevenue) kpis.splice(4,0,{label:'Active Lease Value (UGX)', value:monthlyRev.toLocaleString(), icon:'payments', cls:'blue'});
+
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
+    <div class="kpi-card ${k.cls}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <span class="material-icons kpi-icon">${k.icon}</span>
+    </div>`).join('');
+
+  // Bar chart
+  const byProject = {};
+  DB.leases.filter(l=>['Active','Overdue'].includes(l.status)).forEach(l=>{
+    const p = DB.projects.find(p=>p.id===l.projectId);
+    const n = p?p.name:'Unknown';
+    byProject[n] = (byProject[n]||0)+1;
+  });
+  const max = Math.max(...Object.values(byProject),1);
+  document.getElementById('bar-chart-area').innerHTML = Object.keys(byProject).length
+    ? Object.entries(byProject).map(([n,v])=>`
+      <div class="bar-row">
+        <span class="bar-label">${n.length>18?n.slice(0,16)+'…':n}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${(v/max*100).toFixed(0)}%"></div></div>
+        <span class="bar-val">${v}</span>
+      </div>`).join('')
+    : '<p style="color:var(--dark-gray);font-size:.85rem">No active leases.</p>';
+
+  // Recent activity
+  const recent = [...DB.leases].reverse().slice(0,5);
+  document.getElementById('recent-activity').innerHTML = recent.map(l=>{
+    const p = DB.projects.find(p=>p.id===l.projectId);
+    const a = DB.assets.find(a=>a.id===l.assetId);
+    return `<div style="display:flex;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--light-gray)">
+      <span class="material-icons" style="color:var(--ipa-green);font-size:1.1rem">${l.assetType==='PDA'?'tablet_android':'laptop'}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a?a.assetId:'–'} → ${p?p.code:'–'}</div>
+        <div style="font-size:.75rem;color:var(--dark-gray)">${l.startDate} – ${l.endDate}</div>
+      </div>
+      ${statusBadge(l.status)}
+    </div>`;
+  }).join('');
+}
+
+// ── INVENTORY ─────────────────────────────────────────────────────
+function switchInventoryTab(type, el) {
+  currentInventoryTab = type;
+  document.querySelectorAll('#page-inventory .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('inv-tab-title').textContent = type==='pda'?'PDA / Tablet Assets':'Laptop Assets';
+  renderInventory();
+}
+function renderInventory() {
+  const isAdmin = currentUser.role==='Administrator';
+  document.getElementById('inv-admin-btns').style.display = isAdmin?'flex':'none';
+
+  const search = (document.getElementById('inv-search').value||'').toLowerCase();
+  const statusF = document.getElementById('inv-status-filter').value;
+  const type = currentInventoryTab==='pda'?'PDA':'Laptop';
+
+  const filtered = DB.assets.filter(a=>{
+    if(a.type !== type) return false;
+    if(statusF && a.status!==statusF) return false;
+    const s = `${a.assetId} ${a.serial} ${a.model}`.toLowerCase();
+    return !search || s.includes(search);
+  });
+
+  document.getElementById('inv-tbody').innerHTML = filtered.length ? filtered.map(a=>{
+    const bv = calcBookValue(a.cost, a.purchaseDate);
+    const fullyDepr = bv===0;
+    return `<tr>
+      <td><strong>${a.assetId}</strong></td>
+      <td>${a.serial}</td>
+      <td>${a.model}</td>
+      <td>${a.purchaseDate}</td>
+      <td>${a.cost.toLocaleString()}</td>
+      <td>${fullyDepr?'<span style="color:var(--red-orange);font-weight:700">Fully Depreciated</span>':bv.toLocaleString()}</td>
+      <td>${statusBadge(a.status)}</td>
+      <td style="white-space:nowrap">
+        ${isAdmin?`<button class="btn btn-secondary btn-sm" onclick="openEditAssetModal('${a.id}')"><span class="material-icons" style="font-size:.85rem">edit</span></button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAsset('${a.id}')"><span class="material-icons" style="font-size:.85rem">delete</span></button>`:'–'}
+      </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="8"><div class="empty-state"><span class="material-icons">devices</span><p>No assets found.</p></div></td></tr>`;
+}
+
+function openAddAssetModal() {
+  const type = currentInventoryTab==='pda'?'PDA':'Laptop';
+  const prefix = type==='PDA'?'PDA':'LPT';
+  const num = String(DB.nextAssetNums[type]||1).padStart(3,'0');
+  const nextId = `${prefix}-${num}`;
+  openModal('Add Asset', `
+    <div class="form-row">
+      <div class="form-group-inline"><label>Asset ID</label><input id="ma-id" class="form-control-sm" value="${nextId}"></div>
+      <div class="form-group-inline"><label>Serial Number</label><input id="ma-serial" class="form-control-sm"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Model</label><input id="ma-model" class="form-control-sm"></div>
+      <div class="form-group-inline"><label>Type</label><select id="ma-type" class="form-control-sm"><option value="PDA">PDA / Tablet</option><option value="Laptop">Laptop</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Purchase Date</label><input type="date" id="ma-date" class="form-control-sm"></div>
+      <div class="form-group-inline"><label>Purchase Cost (UGX)</label><input type="number" id="ma-cost" class="form-control-sm"></div>
+    </div>`,
+    [{label:'Save Asset', cls:'btn-primary', fn: ()=>{
+      const a = {
+        id:'a'+Date.now(), assetId:v('ma-id'), serial:v('ma-serial'),
+        model:v('ma-model'), type:v('ma-type'), purchaseDate:v('ma-date'),
+        cost:parseInt(v('ma-cost'))||0, status:'Available'
+      };
+      DB.assets.push(a);
+      DB.nextAssetNums[a.type] = (DB.nextAssetNums[a.type]||1)+1;
+      closeModal(); renderInventory(); toast('Asset added successfully.');
+    }}]);
+  document.getElementById('ma-type').value = type;
+}
+
+function openEditAssetModal(id) {
+  const a = DB.assets.find(x=>x.id===id);
+  openModal('Edit Asset', `
+    <div class="form-row">
+      <div class="form-group-inline"><label>Asset ID</label><input id="ma-id" class="form-control-sm" value="${a.assetId}"></div>
+      <div class="form-group-inline"><label>Serial Number</label><input id="ma-serial" class="form-control-sm" value="${a.serial}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Model</label><input id="ma-model" class="form-control-sm" value="${a.model}"></div>
+      <div class="form-group-inline"><label>Status</label>
+        <select id="ma-status" class="form-control-sm">
+          ${['Available','Leased','Under Maintenance','Retired'].map(s=>`<option ${a.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Purchase Date</label><input type="date" id="ma-date" class="form-control-sm" value="${a.purchaseDate}"></div>
+      <div class="form-group-inline"><label>Purchase Cost (UGX)</label><input type="number" id="ma-cost" class="form-control-sm" value="${a.cost}"></div>
+    </div>`,
+    [{label:'Save Changes', cls:'btn-primary', fn:()=>{
+      a.assetId=v('ma-id'); a.serial=v('ma-serial'); a.model=v('ma-model');
+      a.status=v('ma-status'); a.purchaseDate=v('ma-date'); a.cost=parseInt(v('ma-cost'))||a.cost;
+      closeModal(); renderInventory(); toast('Asset updated.');
+    }}]);
+}
+
+function deleteAsset(id) {
+  if(!confirm('Delete this asset? This cannot be undone.')) return;
+  const idx = DB.assets.findIndex(a=>a.id===id);
+  DB.assets.splice(idx,1);
+  renderInventory(); toast('Asset deleted.','error');
+}
+
+function openBulkUploadModal() {
+  openModal('Bulk Upload Assets', `
+    <p style="font-size:.875rem;color:var(--dark-gray);margin-bottom:1rem">Upload a CSV file with columns: AssetID, Serial, Model, Type (PDA/Laptop), PurchaseDate (YYYY-MM-DD), Cost</p>
+    <input type="file" id="bulk-file" class="form-control-sm" accept=".csv">
+    <p style="font-size:.78rem;color:var(--dark-gray);margin-top:.5rem">Duplicates (by Serial) will be skipped automatically.</p>`,
+    [{label:'Upload', cls:'btn-primary', fn:()=>{
+      const f = document.getElementById('bulk-file').files[0];
+      if(!f){toast('Please select a file.','error');return;}
+      const r = new FileReader();
+      r.onload = e => {
+        const lines = e.target.result.split('\n').slice(1).filter(Boolean);
+        let added=0,skipped=0;
+        lines.forEach(line=>{
+          const [assetId,serial,model,type,purchaseDate,cost] = line.split(',').map(s=>s.trim().replace(/"/g,''));
+          if(!serial) return;
+          if(DB.assets.find(a=>a.serial===serial)){skipped++;return;}
+          DB.assets.push({id:'a'+Date.now()+Math.random(),assetId,serial,model,type:type||'PDA',purchaseDate,cost:parseInt(cost)||0,status:'Available'});
+          added++;
+        });
+        closeModal(); renderInventory();
+        toast(`Uploaded: ${added} added, ${skipped} skipped (duplicates).`);
+      };
+      r.readAsText(f);
+    }}]);
+}
+
+// ── LEASE FORM ─────────────────────────────────────────────────────
+let leaseLines = [];
+function setupLeaseForm() {
+  leaseLines = [];
+  const sel = document.getElementById('req-budget-holder');
+  sel.innerHTML = DB.users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('');
+  addLeaseLine();
+}
+
+function addLeaseLine() {
+  const id = 'line_'+Date.now();
+  const projects = DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  const line = {id};
+  leaseLines.push(line);
+  const div = document.createElement('div');
+  div.className='lease-line';
+  div.id=id;
+  div.innerHTML=`
+    <button class="remove-line" onclick="removeLeaseLine('${id}')"><span class="material-icons">close</span></button>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Project</label>
+        <select id="${id}-proj" class="form-control-sm" onchange="updateLineTotal('${id}')">${projects}</select>
+      </div>
+      <div class="form-group-inline"><label>Device Category</label>
+        <select id="${id}-cat" class="form-control-sm" onchange="updateLineTotal('${id}')">
+          <option value="PDA">PDA / Tablet (UGX 5,000/day)</option>
+          <option value="Laptop">Laptop (UGX 20,000/day)</option>
+        </select>
+      </div>
+      <div class="form-group-inline"><label>Start Date</label>
+        <input type="date" id="${id}-start" class="form-control-sm" onchange="updateLineTotal('${id}')">
+      </div>
+      <div class="form-group-inline"><label>End Date</label>
+        <input type="date" id="${id}-end" class="form-control-sm" onchange="updateLineTotal('${id}')">
+      </div>
+      <div class="form-group-inline"><label>Chargeable Days</label>
+        <input type="number" id="${id}-days" class="form-control-sm" readonly placeholder="Auto">
+      </div>
+      <div class="form-group-inline"><label>Daily Rate (UGX)</label>
+        <input type="number" id="${id}-rate" class="form-control-sm" readonly>
+      </div>
+      <div class="form-group-inline"><label>No. of Items</label>
+        <input type="number" id="${id}-qty" class="form-control-sm" value="1" min="1" onchange="updateLineTotal('${id}')">
+      </div>
+      <div class="form-group-inline"><label>Total Amount (UGX)</label>
+        <input type="number" id="${id}-total" class="form-control-sm" readonly>
+      </div>
+    </div>`;
+  document.getElementById('lease-lines-container').appendChild(div);
+  updateLineTotal(id);
+}
+
+function removeLeaseLine(id) {
+  leaseLines = leaseLines.filter(l=>l.id!==id);
+  document.getElementById(id).remove();
+  updateGrandTotal();
+}
+
+function updateLineTotal(id) {
+  const cat = v(id+'-cat');
+  const rate = cat==='PDA'?PDA_RATE:LAPTOP_RATE;
+  const start = v(id+'-start');
+  const end = v(id+'-end');
+  const qty = parseInt(v(id+'-qty'))||1;
+  document.getElementById(id+'-rate').value = rate;
+  if(start && end && end>=start) {
+    const days = countChargeDays(start,end);
+    document.getElementById(id+'-days').value = days;
+    document.getElementById(id+'-total').value = days*rate*qty;
+  }
+  updateGrandTotal();
+}
+
+function updateGrandTotal() {
+  let total = 0;
+  leaseLines.forEach(l=>{
+    total += parseInt(document.getElementById(l.id+'-total')?.value||0);
+  });
+  document.getElementById('lease-total-row').innerHTML = total>0
+    ? `<span style="font-size:.85rem;color:var(--dark-gray)">Grand Total: </span>UGX ${total.toLocaleString()}`
+    : '';
+}
+
+function saveDraft() { toast('Draft saved. You can continue later.'); }
+
+function submitLeaseRequest() {
+  const summary = v('req-summary');
+  if(!summary){toast('Please enter a request summary.','error');return;}
+  if(leaseLines.length===0){toast('Please add at least one lease line.','error');return;}
+
+  let valid = true;
+  leaseLines.forEach(l=>{
+    const start = v(l.id+'-start');
+    const end = v(l.id+'-end');
+    if(!start||!end){valid=false;return;}
+    // Check availability
+    const cat = v(l.id+'-cat');
+    const qty = parseInt(v(l.id+'-qty'))||1;
+    const available = DB.assets.filter(a=>a.type===cat&&a.status==='Available');
+    if(available.length < qty){
+      toast(`Not enough ${cat} devices available. ${available.length} available, ${qty} requested.`,'error');
+      valid=false;
+    }
+  });
+  if(!valid) return;
+
+  // Create lease records
+  leaseLines.forEach(l=>{
+    const cat = v(l.id+'-cat');
+    const available = DB.assets.filter(a=>a.type===cat&&a.status==='Available');
+    const qty = parseInt(v(l.id+'-qty'))||1;
+    for(let i=0;i<Math.min(qty,available.length);i++){
+      const asset = available[i];
+      asset.status = 'Leased';
+      const days = parseInt(document.getElementById(l.id+'-days').value)||0;
+      const amount = days * (cat==='PDA'?PDA_RATE:LAPTOP_RATE);
+      DB.leases.push({
+        id:'l'+Date.now()+i,
+        leaseId:'LSE-'+String(DB.nextLeaseNum++).padStart(4,'0'),
+        projectId:v(l.id+'-proj'),
+        assetId:asset.id,
+        assetType:cat,
+        startDate:v(l.id+'-start'),
+        endDate:v(l.id+'-end'),
+        days,amount,
+        status:'Active',
+        requestor:currentUser.id,
+        summary
+      });
+    }
+  });
+
+  toast('Lease request submitted successfully!');
+  setupLeaseForm();
+  navigate('active-leases');
+}
+
+// ── ACTIVE LEASES ──────────────────────────────────────────────────
+function renderActiveLeases() {
+  const search = (document.getElementById('al-search').value||'').toLowerCase();
+  const statusF = document.getElementById('al-status-filter').value;
+  const role = currentUser.role;
+  const canAll = ['Administrator','Finance','Project Manager'].includes(role);
+
+  let leases = DB.leases.filter(l=>['Active','Overdue'].includes(l.status));
+  if(!canAll) leases = leases.filter(l=>l.requestor===currentUser.id);
+  if(statusF) leases = leases.filter(l=>l.status===statusF);
+  if(search){
+    leases = leases.filter(l=>{
+      const p=DB.projects.find(p=>p.id===l.projectId);
+      const a=DB.assets.find(a=>a.id===l.assetId);
+      return `${l.leaseId} ${p?.name||''} ${a?.assetId||''}`.toLowerCase().includes(search);
+    });
+  }
+
+  document.getElementById('al-tbody').innerHTML = leases.length ? leases.map(l=>{
+    const p = DB.projects.find(p=>p.id===l.projectId);
+    const a = DB.assets.find(a=>a.id===l.assetId);
+    return `<tr>
+      <td><strong>${l.leaseId}</strong></td>
+      <td>${p?p.code:'–'}</td>
+      <td>${a?a.assetId:'–'} <small style="color:var(--dark-gray)">${a?a.model:''}</small></td>
+      <td>${l.assetType}</td>
+      <td>${l.startDate}</td>
+      <td>${l.endDate}</td>
+      <td>${l.days}</td>
+      <td>${l.amount.toLocaleString()}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-secondary btn-sm" onclick="viewLease('${l.id}')"><span class="material-icons" style="font-size:.85rem">visibility</span></button>
+        <button class="btn btn-outline btn-sm" onclick="returnLease('${l.id}')"><span class="material-icons" style="font-size:.85rem">assignment_return</span></button>
+        <button class="btn btn-danger btn-sm" onclick="alertLease('${l.id}')"><span class="material-icons" style="font-size:.85rem">notifications</span></button>
+      </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="10"><div class="empty-state"><span class="material-icons">assignment</span><p>No active leases found.</p></div></td></tr>`;
+}
+
+function viewLease(id) {
+  const l = DB.leases.find(x=>x.id===id);
+  const p = DB.projects.find(p=>p.id===l.projectId);
+  const a = DB.assets.find(a=>a.id===l.assetId);
+  openModal('Lease Details – '+l.leaseId, `
+    <table style="width:100%;font-size:.875rem;border-collapse:collapse">
+      ${[['Lease ID',l.leaseId],['Status',l.status],['Project',p?p.name:'–'],['Asset',a?`${a.assetId} – ${a.model}`:'–'],
+        ['Device Type',l.assetType],['Start Date',l.startDate],['End Date',l.endDate],
+        ['Chargeable Days',l.days],['Daily Rate','UGX '+((l.assetType==='PDA'?PDA_RATE:LAPTOP_RATE)).toLocaleString()],
+        ['Total Amount','UGX '+l.amount.toLocaleString()],['Summary',l.summary||'–']
+      ].map(([k,v])=>`<tr><td style="padding:.5rem .75rem;font-weight:700;background:var(--light-gray);width:40%;border-radius:4px">${k}</td><td style="padding:.5rem .75rem">${v}</td></tr>`).join('')}
+    </table>`,[]);
+}
+
+function returnLease(id) {
+  const l = DB.leases.find(x=>x.id===id);
+  if(confirm(`Mark ${l.leaseId} as returned?`)){
+    l.status='Returned';
+    const a = DB.assets.find(a=>a.id===l.assetId);
+    if(a) a.status='Available';
+    renderActiveLeases(); toast('Lease marked as returned.');
+  }
+}
+
+function alertLease(id) {
+  const l = DB.leases.find(x=>x.id===id);
+  openModal('Send Alert', `
+    <p style="font-size:.875rem;margin-bottom:1rem">Send an alert notification for lease <strong>${l.leaseId}</strong>:</p>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Alert Type</label>
+        <select id="alert-type" class="form-control-sm">
+          <option>Pickup Ready</option>
+          <option>Upcoming Lease Expiry</option>
+          <option>Overdue Return</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group-inline" style="margin-top:.75rem"><label>Message</label>
+      <textarea id="alert-msg" class="form-control-sm" rows="3" placeholder="Optional message..."></textarea>
+    </div>`,
+    [{label:'Send Alert', cls:'btn-primary', fn:()=>{
+      closeModal(); toast(`Alert sent for ${l.leaseId}.`);
+    }}]);
+}
+
+// ── LEASE HISTORY ──────────────────────────────────────────────────
+function renderLeaseHistory() {
+  const search = (document.getElementById('lh-search').value||'').toLowerCase();
+  const role = currentUser.role;
+  const canAll = ['Administrator','Finance','Project Manager'].includes(role);
+
+  let leases = DB.leases.filter(l=>!['Active','Overdue'].includes(l.status));
+  if(!canAll) leases = leases.filter(l=>l.requestor===currentUser.id);
+  if(search){
+    leases = leases.filter(l=>{
+      const p=DB.projects.find(p=>p.id===l.projectId);
+      const a=DB.assets.find(a=>a.id===l.assetId);
+      return `${l.leaseId} ${p?.name||''} ${a?.assetId||''}`.toLowerCase().includes(search);
+    });
+  }
+  document.getElementById('lh-tbody').innerHTML = leases.length ? leases.map(l=>{
+    const p=DB.projects.find(p=>p.id===l.projectId);
+    const a=DB.assets.find(a=>a.id===l.assetId);
+    return `<tr>
+      <td><strong>${l.leaseId}</strong></td>
+      <td>${p?p.code:'–'}</td>
+      <td>${a?a.assetId:'–'}</td>
+      <td>${l.assetType}</td>
+      <td>${l.startDate}</td>
+      <td>${l.endDate}</td>
+      <td>${l.days}</td>
+      <td>${l.amount.toLocaleString()}</td>
+      <td>${statusBadge(l.status)}</td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="9"><div class="empty-state"><span class="material-icons">history</span><p>No history found.</p></div></td></tr>`;
+}
+
+// ── PROJECTS ───────────────────────────────────────────────────────
+function renderProjects() {
+  const isAdmin = currentUser.role==='Administrator';
+  document.getElementById('add-project-btn').style.display = isAdmin?'inline-flex':'none';
+  document.getElementById('proj-tbody').innerHTML = DB.projects.map(p=>{
+    const bh = DB.users.find(u=>u.id===p.budgetHolder);
+    const pm = DB.users.find(u=>u.id===p.pm);
+    const activeCount = DB.leases.filter(l=>l.projectId===p.id&&['Active','Overdue'].includes(l.status)).length;
+    return `<tr>
+      <td><strong>${p.code}</strong></td>
+      <td>${p.name}</td>
+      <td>${p.grant}</td>
+      <td>${bh?bh.name:'–'}</td>
+      <td>${pm?pm.name:'–'}</td>
+      <td><span class="badge ${activeCount>0?'badge-green':'badge-gray'}">${activeCount}</span></td>
+      <td>${isAdmin?`<button class="btn btn-secondary btn-sm" onclick="openEditProjectModal('${p.id}')"><span class="material-icons" style="font-size:.85rem">edit</span></button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProject('${p.id}')"><span class="material-icons" style="font-size:.85rem">delete</span></button>`:'–'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function openAddProjectModal() {
+  openModal('Add Project', projectFormHTML(),
+    [{label:'Save Project', cls:'btn-primary', fn:()=>{
+      DB.projects.push({
+        id:'p'+Date.now(), code:v('pp-code'), name:v('pp-name'),
+        grant:v('pp-grant'), budgetHolder:v('pp-bh'), pm:v('pp-pm'), fm:v('pp-fm'), financeContact:v('pp-fin')
+      });
+      closeModal(); renderProjects(); toast('Project added.');
+    }}]);
+}
+
+function openEditProjectModal(id) {
+  const p = DB.projects.find(x=>x.id===id);
+  openModal('Edit Project', projectFormHTML(p),
+    [{label:'Save Changes', cls:'btn-primary', fn:()=>{
+      p.code=v('pp-code'); p.name=v('pp-name'); p.grant=v('pp-grant');
+      p.budgetHolder=v('pp-bh'); p.pm=v('pp-pm'); p.fm=v('pp-fm'); p.financeContact=v('pp-fin');
+      closeModal(); renderProjects(); toast('Project updated.');
+    }}]);
+}
+
+function projectFormHTML(p={}) {
+  const uopts = DB.users.map(u=>`<option value="${u.id}" ${p.budgetHolder===u.id?'selected':''}>${u.name}</option>`).join('');
+  return `
+    <div class="form-row">
+      <div class="form-group-inline"><label>Project Code</label><input id="pp-code" class="form-control-sm" value="${p.code||''}"></div>
+      <div class="form-group-inline"><label>Project Name</label><input id="pp-name" class="form-control-sm" value="${p.name||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Grant Code</label><input id="pp-grant" class="form-control-sm" value="${p.grant||''}"></div>
+      <div class="form-group-inline"><label>Budget Holder</label><select id="pp-bh" class="form-control-sm">${uopts}</select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Project Manager</label>
+        <select id="pp-pm" class="form-control-sm">${DB.users.map(u=>`<option value="${u.id}" ${p.pm===u.id?'selected':''}>${u.name}</option>`).join('')}</select>
+      </div>
+      <div class="form-group-inline"><label>Field Manager</label>
+        <select id="pp-fm" class="form-control-sm">${DB.users.map(u=>`<option value="${u.id}" ${p.fm===u.id?'selected':''}>${u.name}</option>`).join('')}</select>
+      </div>
+      <div class="form-group-inline"><label>Finance Contact</label>
+        <select id="pp-fin" class="form-control-sm">${DB.users.map(u=>`<option value="${u.id}" ${p.financeContact===u.id?'selected':''}>${u.name}</option>`).join('')}</select>
+      </div>
+    </div>`;
+}
+
+function deleteProject(id) {
+  if(!confirm('Delete this project?')) return;
+  DB.projects = DB.projects.filter(p=>p.id!==id);
+  renderProjects(); toast('Project deleted.','error');
+}
+
+// ── USERS ──────────────────────────────────────────────────────────
+function renderUsers() {
+  const ROLE_BADGE = {
+    'Administrator':'badge-orange','Finance':'badge-blue',
+    'Project Manager':'badge-green','Field Manager':'badge-teal','Research Associate':'badge-gray'
+  };
+  document.getElementById('users-tbody').innerHTML = DB.users.map(u=>`<tr>
+    <td>${u.username}</td>
+    <td><strong>${u.name}</strong></td>
+    <td>${u.email}</td>
+    <td><span class="badge ${ROLE_BADGE[u.role]||'badge-gray'}">${u.role}</span></td>
+    <td><span class="badge ${u.active?'badge-green':'badge-gray'}">${u.active?'Active':'Disabled'}</span></td>
+    <td style="white-space:nowrap">
+      <button class="btn btn-secondary btn-sm" onclick="openEditUserModal('${u.id}')"><span class="material-icons" style="font-size:.85rem">edit</span></button>
+      <button class="btn btn-${u.active?'danger':'outline'} btn-sm" onclick="toggleUserActive('${u.id}')">
+        <span class="material-icons" style="font-size:.85rem">${u.active?'block':'check_circle'}</span>
+      </button>
+    </td>
+  </tr>`).join('');
+}
+
+function openAddUserModal() {
+  openModal('Add User', userFormHTML(),
+    [{label:'Add User', cls:'btn-primary', fn:()=>{
+      if(DB.users.find(u=>u.username===v('uu-user'))){toast('Username already exists.','error');return;}
+      DB.users.push({
+        id:'u'+Date.now(), username:v('uu-user'), password:v('uu-pass'),
+        name:v('uu-name'), email:v('uu-email'), role:v('uu-role'), active:true
+      });
+      closeModal(); renderUsers(); toast('User added.');
+    }}]);
+}
+
+function openEditUserModal(id) {
+  const u = DB.users.find(x=>x.id===id);
+  openModal('Edit User – '+u.name, userFormHTML(u),
+    [{label:'Save Changes', cls:'btn-primary', fn:()=>{
+      u.name=v('uu-name'); u.email=v('uu-email'); u.role=v('uu-role');
+      if(v('uu-pass')) u.password=v('uu-pass');
+      closeModal(); renderUsers(); toast('User updated.');
+    }}]);
+}
+
+function userFormHTML(u={}) {
+  const roles = ['Administrator','Finance','Project Manager','Field Manager','Research Associate'];
+  return `
+    <div class="form-row">
+      <div class="form-group-inline"><label>Full Name</label><input id="uu-name" class="form-control-sm" value="${u.name||''}"></div>
+      <div class="form-group-inline"><label>Username</label><input id="uu-user" class="form-control-sm" value="${u.username||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Email</label><input type="email" id="uu-email" class="form-control-sm" value="${u.email||''}"></div>
+      <div class="form-group-inline"><label>Role</label>
+        <select id="uu-role" class="form-control-sm">${roles.map(r=>`<option ${u.role===r?'selected':''}>${r}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group-inline"><label>Password ${u.id?'(leave blank to keep)':''}</label>
+        <input type="password" id="uu-pass" class="form-control-sm" placeholder="${u.id?'New password (optional)':'Password'}">
+      </div>
+    </div>`;
+}
+
+function toggleUserActive(id) {
+  const u = DB.users.find(x=>x.id===id);
+  if(u.id===currentUser.id){toast('Cannot disable your own account.','error');return;}
+  u.active=!u.active;
+  renderUsers(); toast(u.active?'User enabled.':'User disabled.');
+}
+
+// ── REPORTS ────────────────────────────────────────────────────────
+let reportData = [];
+function runReport(type) {
+  currentReportType = type;
+  const canRevenue = ['Administrator','Finance','Project Manager'].includes(currentUser.role);
+  if(type==='monthly-revenue' && !canRevenue){toast('Access denied.','error');return;}
+
+  const card = document.getElementById('report-output-card');
+  card.style.display='block';
+  card.scrollIntoView({behavior:'smooth'});
+
+  const titles = {
+    'lease-summary':'Lease Summary','pda-utilization':'PDA Utilization',
+    'laptop-utilization':'Laptop Utilization','project-billing':'Project Billing',
+    'monthly-revenue':'Monthly Revenue','depreciation':'Depreciation Summary'
+  };
+  document.getElementById('report-title').textContent = titles[type];
+
+  let html='', headers=[], rows=[];
+  if(type==='lease-summary'){
+    headers=['Lease ID','Project','Asset','Type','Start','End','Days','Amount (UGX)','Status'];
+    rows = DB.leases.map(l=>{
+      const p=DB.projects.find(p=>p.id===l.projectId);
+      const a=DB.assets.find(a=>a.id===l.assetId);
+      return [l.leaseId,p?p.name:'–',a?a.assetId:'–',l.assetType,l.startDate,l.endDate,l.days,l.amount.toLocaleString(),l.status];
+    });
+  } else if(type==='pda-utilization'||type==='laptop-utilization'){
+    const t = type==='pda-utilization'?'PDA':'Laptop';
+    headers=['Asset ID','Model','Serial','Status','Total Leases','Total Days','Total Revenue (UGX)'];
+    rows = DB.assets.filter(a=>a.type===t).map(a=>{
+      const als = DB.leases.filter(l=>l.assetId===a.id);
+      return [a.assetId,a.model,a.serial,a.status,als.length,als.reduce((s,l)=>s+l.days,0),als.reduce((s,l)=>s+l.amount,0).toLocaleString()];
+    });
+  } else if(type==='project-billing'){
+    headers=['Project Code','Project Name','Grant','Active Leases','Completed Leases','Total Charged (UGX)'];
+    rows = DB.projects.map(p=>{
+      const ls = DB.leases.filter(l=>l.projectId===p.id);
+      return [p.code,p.name,p.grant,ls.filter(l=>['Active','Overdue'].includes(l.status)).length,ls.filter(l=>l.status==='Returned').length,ls.reduce((s,l)=>s+l.amount,0).toLocaleString()];
+    });
+  } else if(type==='monthly-revenue'){
+    const byMonth={};
+    DB.leases.forEach(l=>{
+      const m=l.startDate.slice(0,7);
+      byMonth[m]=(byMonth[m]||0)+l.amount;
+    });
+    headers=['Month','Revenue (UGX)'];
+    rows = Object.entries(byMonth).sort().map(([m,v])=>[m,v.toLocaleString()]);
+  } else if(type==='depreciation'){
+    headers=['Asset ID','Model','Type','Purchase Date','Original Cost (UGX)','Book Value (UGX)','Status'];
+    rows = DB.assets.map(a=>{
+      const bv=calcBookValue(a.cost,a.purchaseDate);
+      return [a.assetId,a.model,a.type,a.purchaseDate,a.cost.toLocaleString(),bv===0?'FULLY DEPRECIATED':bv.toLocaleString(),a.status];
+    });
+  }
+
+  reportData = rows;
+  html = `<table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}
+  </tbody></table>`;
+  document.getElementById('report-table-area').innerHTML = html;
+}
+
+function exportCSV() {
+  if(!reportData.length){toast('Run a report first.','error');return;}
+  const csv = reportData.map(r=>r.join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`ipa-report-${currentReportType}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast('CSV exported.');
+}
+
+// ── HOLIDAYS ───────────────────────────────────────────────────────
+function renderHolidays() {
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('holidays-tbody').innerHTML = UGANDA_HOLIDAYS_2026.map(h=>{
+    const d=new Date(h.date);
+    const dow=d.getDay();
+    const isWkend=dow===0||dow===6;
+    return `<tr>
+      <td><strong>${h.date}</strong></td>
+      <td>${days[dow]}</td>
+      <td>${h.name}</td>
+      <td><span class="badge ${isWkend?'badge-gray':'badge-orange'}">
+        ${isWkend?'Weekend (already excluded)':'Public holiday – excluded from billing'}
+      </span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const m = {
+    'Available':'badge-green','Leased':'badge-blue','Under Maintenance':'badge-orange',
+    'Retired':'badge-gray','Active':'badge-blue','Overdue':'badge-orange',
+    'Returned':'badge-green','Draft':'badge-gray'
+  };
+  return `<span class="badge ${m[s]||'badge-gray'}">${s}</span>`;
+}
+
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.className = 'toast show' + (type==='error'?' error':'');
+  t.innerHTML = `<span class="material-icons" style="font-size:1rem">${type==='error'?'error':'check_circle'}</span> ${msg}`;
+  clearTimeout(t._to);
+  t._to = setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+function openModal(title, body, buttons=[]) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  const footer = document.getElementById('modal-footer');
+  footer.innerHTML = `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>`;
+  buttons.forEach(b=>{
+    const btn = document.createElement('button');
+    btn.className = 'btn '+b.cls;
+    btn.textContent = b.label;
+    btn.onclick = b.fn;
+    footer.appendChild(btn);
+  });
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// Close modal on overlay click
+document.getElementById('modal-overlay').addEventListener('click', function(e){
+  if(e.target===this) closeModal();
+});
+</script>
+</body>
+</html>
