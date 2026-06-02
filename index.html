@@ -695,11 +695,11 @@ const DEPR_RATE = 0.3333;
 // Default users
 let DB = {
   users: [
-    {id:'u1',username:'admin',password:'admin123',name:'Admin User',email:'admin@poverty-action.org',role:'Administrator',active:true},
-    {id:'u2',username:'finance',password:'fin123',name:'Grace Nakato',email:'g.nakato@poverty-action.org',role:'Finance',active:true},
-    {id:'u3',username:'pm1',password:'pm123',name:'David Okello',email:'d.okello@poverty-action.org',role:'Project Manager',active:true},
-    {id:'u4',username:'fm1',password:'fm123',name:'Sarah Apio',email:'s.apio@poverty-action.org',role:'Field Manager',active:true},
-    {id:'u5',username:'ra1',password:'ra123',name:'James Mutebe',email:'j.mutebe@poverty-action.org',role:'Research Associate',active:true},
+    {id:'u1',username:'admin',password:'admin123',name:'Admin User',role:'Administrator',active:true},
+    {id:'u2',username:'finance',password:'fin123',name:'Grace Nakato',role:'Finance',active:true},
+    {id:'u3',username:'bh',password:'pm123',name:'David Okello',role:'Project Manager',active:true},
+    {id:'u4',username:'fm',password:'fm123',name:'Sarah Apio',role:'Field Manager',active:true},
+    {id:'u5',username:'ra',password:'ra123',name:'James Mutebe',role:'Research Associate',active:true},
   ],
   projects: [
     {id:'p1',code:'KCP-001',name:'Kilimo Credit Project',grant:'GR-2025-001',budgetHolder:'u2',pm:'u3',fm:'u4',financeContact:'u2'},
